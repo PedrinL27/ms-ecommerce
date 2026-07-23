@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "pedidos")
@@ -31,7 +32,7 @@ public class Pedido {
     @Column(name = "observacoes")
     private String observacoes;
 
-    @Column(name = "name")
+    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private StatusPedido status;
 
@@ -40,4 +41,10 @@ public class Pedido {
 
     @Column(name = "url_nf")
     private String urlNotaFiscal;
+
+    @Transient
+    private DadosPagamento dadosPagamento;
+
+    @OneToMany(mappedBy = "pedido")
+    private List<ItemPedido> itens;
 }

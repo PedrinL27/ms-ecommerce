@@ -1,5 +1,6 @@
 package com.pedrin.pedidos.service;
 
+import com.pedrin.pedidos.model.Pedido;
 import com.pedrin.pedidos.repository.ItemPedidoRepository;
 import com.pedrin.pedidos.repository.PedidoRepository;
 import com.pedrin.pedidos.validator.PedidoValidator;
@@ -14,4 +15,10 @@ public class PedidoService {
     private final ItemPedidoRepository itemPedidoRepository;
 
     private final PedidoValidator pedidoValidator;
+
+    public Pedido criarPedido(Pedido pedido) {
+        pedidoRepository.save(pedido);
+        itemPedidoRepository.saveAll(pedido.getItens());
+        return pedido;
+    }
 }
