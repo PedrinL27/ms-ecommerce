@@ -2,6 +2,11 @@ package com.pedrin.pedidos.controller;
 
 import com.pedrin.pedidos.controller.dto.NovoPedidoDTO;
 import com.pedrin.pedidos.controller.mappers.PedidoMapper;
+import com.pedrin.pedidos.exceptions.PagamentoNaoAprovadoException;
+import com.pedrin.pedidos.exceptions.ValidationException;
+import com.pedrin.pedidos.model.enums.StatusPedido;
+import com.pedrin.pedidos.model.representation.ErroPagamento;
+import com.pedrin.pedidos.model.representation.ErroResposta;
 import com.pedrin.pedidos.model.Pedido;
 import com.pedrin.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +26,20 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<Object> criar(@RequestBody NovoPedidoDTO dto) {
-        Pedido pedido = service.criarPedido(
-                pedidoMapper.toEntity(dto));
-        return ResponseEntity.ok(pedido.getCodigo());
+        try {
+            Pedido pedido = service.criarPedido(pedidoMapper.toEntity(dto));
+            return ResponseEntity.ok(pedido.getCodigo());
+        } catch (ValidationException e) {
+            var erro = new ErroResposta("Erro de validacao", e.getField(), e.getMessage());
+            return ResponseEntity.badRequest().body(erro);
+        } catch (PagamentoNaoAprovadoException e) {
+            Pedido pedido = pedidoMapper.toEntity(dto);
+            pedido.setStatus(StatusPedido.ERRO_PAGAMENTO);
+            pedido.setObservacoes(e.getMessage());
+
+            service.atualizarPedido(pedido);
+            var erroPagamento = new ErroPagamento(pedido.getObservacoes(), pedido.getStatus());
+            return ResponseEntity.ok(erroPagamento);
+        }
     }
 }

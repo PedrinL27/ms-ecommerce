@@ -30,14 +30,15 @@ public class PedidoService {
         return pedido;
     }
 
+    public Pedido atualizarPedido(Pedido pedido) {
+        realizarPersistencia(pedido);
+        return pedido;
+    }
+
     private void enviarSolicitacaoPedido(Pedido pedido) {
-        try {
-            String chavePagamento = servicoBancarioClient.solicitarPagamento(pedido);
-            pedido.setChavePagamento(chavePagamento);
-        } catch (PagamentoNaoAprovadoException e) {
-            pedido.setStatus(StatusPedido.ERRO_PAGAMENTO);
-            pedido.setObservacoes("Ocorreu um seguinte erro: " + e.getMessage());
-        }
+        String chavePagamento = servicoBancarioClient.solicitarPagamento(pedido);
+        pedido.setChavePagamento(chavePagamento);
+
     }
 
     private void realizarPersistencia(Pedido pedido) {
