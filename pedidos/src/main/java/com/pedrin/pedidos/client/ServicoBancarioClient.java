@@ -18,6 +18,10 @@ public class ServicoBancarioClient {
         if (chanceErro == 1) {
             throw new PagamentoNaoAprovadoException("Pagamento nao aprovado favor verificar com o banco");
         }
+        return solicitarChavePagamento();
+    }
+
+    public String solicitarChavePagamento() {
         return UUID.randomUUID().toString();
     }
 }

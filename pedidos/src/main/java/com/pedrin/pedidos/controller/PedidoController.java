@@ -1,7 +1,9 @@
 package com.pedrin.pedidos.controller;
 
+import com.pedrin.pedidos.controller.dto.AdicionarNovoPagamentoDTO;
 import com.pedrin.pedidos.controller.dto.NovoPedidoDTO;
 import com.pedrin.pedidos.controller.mappers.PedidoMapper;
+import com.pedrin.pedidos.exceptions.ItemNaoEncontradoException;
 import com.pedrin.pedidos.exceptions.PagamentoNaoAprovadoException;
 import com.pedrin.pedidos.exceptions.ValidationException;
 import com.pedrin.pedidos.model.enums.StatusPedido;
@@ -41,5 +43,20 @@ public class PedidoController {
             var erroPagamento = new ErroPagamento(pedido.getObservacoes(), pedido.getStatus());
             return ResponseEntity.ok(erroPagamento);
         }
+    }
+
+    @PostMapping("/pagamentos")
+    public ResponseEntity<Object> adicionarNovoPagamento(@RequestBody AdicionarNovoPagamentoDTO dto) {
+        try {
+            service.adicionarNovoPagamento(
+                    dto.codigoPedido(),
+                    dto.dados(),
+                    dto.tipoPagamento()
+            );
+        } catch (ItemNaoEncontradoException e) {
+            ErroResposta resposta = new ErroResposta("Item nao encontrado", "codigoPedido", e.getMessage());
+            return ResponseEntity.badRequest().body(resposta);
+        }
+        return ResponseEntity.noContent().build();
     }
 }
