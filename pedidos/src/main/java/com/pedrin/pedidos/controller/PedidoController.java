@@ -10,13 +10,12 @@ import com.pedrin.pedidos.model.enums.StatusPedido;
 import com.pedrin.pedidos.model.representation.ErroPagamento;
 import com.pedrin.pedidos.model.representation.ErroResposta;
 import com.pedrin.pedidos.model.Pedido;
+import com.pedrin.pedidos.publisher.dto.DetalhePedidoDTO;
+import com.pedrin.pedidos.publisher.mappers.DetalhePedidoMapper;
 import com.pedrin.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -24,7 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class PedidoController {
 
     private final PedidoService service;
+
     private final PedidoMapper pedidoMapper;
+    private final DetalhePedidoMapper detalhePedidoMapper;
 
     @PostMapping
     public ResponseEntity<Object> criar(@RequestBody NovoPedidoDTO dto) {
@@ -58,5 +59,16 @@ public class PedidoController {
             return ResponseEntity.badRequest().body(resposta);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("{codigo}")
+    public ResponseEntity<DetalhePedidoDTO> obterDetalhePedido(
+            @PathVariable Long codigo
+    ) {
+        return service
+                .carregarDadosCompletosPedidos(codigo)
+                .map(detalhePedidoMapper::toDTO)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
