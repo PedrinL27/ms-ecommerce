@@ -1,5 +1,6 @@
 package com.pedrin.pedidos.model;
 
+import com.pedrin.pedidos.client.representation.ClienteRepresentation;
 import com.pedrin.pedidos.model.enums.StatusPedido;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -44,6 +45,9 @@ public class Pedido {
 
     @Transient
     private DadosPagamento dadosPagamento;
+
+    @Transient
+    private ClienteRepresentation dadosCliente;
 
     @OneToMany(mappedBy = "pedido")
     private List<ItemPedido> itens;
