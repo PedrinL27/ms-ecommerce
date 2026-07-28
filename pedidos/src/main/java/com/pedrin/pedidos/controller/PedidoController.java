@@ -12,6 +12,7 @@ import com.pedrin.pedidos.model.representation.ErroResposta;
 import com.pedrin.pedidos.model.Pedido;
 import com.pedrin.pedidos.publisher.dto.DetalhePedidoDTO;
 import com.pedrin.pedidos.publisher.mappers.DetalhePedidoMapper;
+import com.pedrin.pedidos.service.CallbackService;
 import com.pedrin.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 public class PedidoController {
 
     private final PedidoService service;
+    private final CallbackService callbackService;
 
     private final PedidoMapper pedidoMapper;
     private final DetalhePedidoMapper detalhePedidoMapper;
@@ -65,7 +67,7 @@ public class PedidoController {
     public ResponseEntity<DetalhePedidoDTO> obterDetalhePedido(
             @PathVariable Long codigo
     ) {
-        return service
+        return callbackService
                 .carregarDadosCompletosPedidos(codigo)
                 .map(detalhePedidoMapper::toDTO)
                 .map(ResponseEntity::ok)
