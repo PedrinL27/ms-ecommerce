@@ -1,4 +1,4 @@
-package com.pedrin.faturamento.config;
+package com.pedrin.logistica.config;
 
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -55,3 +55,4 @@ public class KafkaConfig {
         return new KafkaTemplate<>(producerFactory);
     }
 }
+

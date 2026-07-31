@@ -1,4 +1,4 @@
-package com.pedrin.faturamento.config;
+package com.pedrin.logistica.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: logistica
+
+  kafka:
+    bootstrap-servers: 'http://localhost:29092'
+    consumer:
+      group-id: ecommerce-logistica
+      auto-offset-reset: earliest
+
+ecommerce:
+  config:
+    kafka:
+      topics:
+        pedidos-faturados: 'ecommerce.pedidos-faturados'
+        pedidos-enviados: 'ecommerce.pedidos-enviados'
+
+server:
+  port: 8084
