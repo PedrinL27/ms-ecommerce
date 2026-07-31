@@ -3,6 +3,7 @@ package com.pedrin.faturamento.service;
 import com.pedrin.faturamento.bucket.BucketFile;
 import com.pedrin.faturamento.bucket.BucketService;
 import com.pedrin.faturamento.model.Pedido;
+import com.pedrin.faturamento.publisher.FaturamentoPublisher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -17,6 +18,7 @@ public class GeradorNotaFiscalService {
 
     private final NotaFiscalService notaFiscalService;
     private final BucketService bucketService;
+    private final FaturamentoPublisher publisher;
 
     public void gerar(Pedido pedido){
         try {
@@ -30,7 +32,12 @@ public class GeradorNotaFiscalService {
                     new ByteArrayInputStream(byteArray),
                     MediaType.APPLICATION_PDF,
                     byteArray.length);
+
             bucketService.upload(file);
+
+            String url = bucketService.getUrl(nomeArquivo);
+            publisher.publicar(pedido, url);
+
         } catch (Exception e) {
             log.error(e.getMessage());
             throw new RuntimeException(e);

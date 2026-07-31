@@ -13,6 +13,7 @@ ecommerce:
     kafka:
       topics:
         pedidos-pagos: 'ecommerce.pedidos-pagos'
+        pedidos-faturados: 'ecommerce.pedidos-faturados'
 
 server:
   port: 8083

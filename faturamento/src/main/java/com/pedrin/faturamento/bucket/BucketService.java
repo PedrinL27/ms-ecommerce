@@ -40,7 +40,7 @@ public class BucketService {
                     .method(Http.Method.GET)
                     .bucket(props.getBucketName())
                     .object(filename)
-                    .expiry(1, TimeUnit.DAYS)
+                    .expiry(7, TimeUnit.DAYS)
                     .build();
 
             return client.getPresignedObjectUrl(object);
