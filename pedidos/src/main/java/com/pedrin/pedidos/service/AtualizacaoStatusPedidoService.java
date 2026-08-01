@@ -22,9 +22,16 @@ public class AtualizacaoStatusPedidoService {
 
         repository.findById(codigo).ifPresent(pedido -> {
             pedido.setStatus(status);
-            pedido.setUrlNotaFiscal(urlNotaFiscal);
-            pedido.setCodigoRastreio(codigoRastreio);
-        });
+            if (urlNotaFiscal != null) {
+                pedido.setUrlNotaFiscal(urlNotaFiscal);
+                pedido.setObservacoes("Gerado a nota fiscal e encaminhado para a logistica");
+            }
+            if (codigoRastreio != null) {
+                pedido.setCodigoRastreio(codigoRastreio);
+                pedido.setObservacoes("Pedido a caminho");
+            }
 
+            repository.save(pedido);
+        });
     }
 }
