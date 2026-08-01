@@ -17,7 +17,24 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
-    public Optional<Produto> obterPorCodigo(Long codigo) {
+    public Optional<Produto> obterPorCodigo(Long codigo){
+        var produtoOptional = repository.findById(codigo);
+
+        if (produtoOptional.isPresent()) {
+            var produto = produtoOptional.get();
+            if (!produto.isAtivo()) {
+                return Optional.empty();
+            }
+        }
+        return produtoOptional;
+    }
+
+    public void deletar(Produto produto) {
+        produto.setAtivo(false);
+        repository.save(produto);
+    }
+
+    public Optional<Produto> obterHistoricoPorCodigo(Long codigo) {
         return repository.findById(codigo);
     }
 }

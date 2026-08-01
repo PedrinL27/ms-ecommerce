@@ -1,7 +1,7 @@
-package com.pedrin.clientes.controller;
+package com.pedrin.produtos.controller;
 
-import com.pedrin.clientes.model.Cliente;
-import com.pedrin.clientes.service.ClienteService;
+import com.pedrin.produtos.model.Produto;
+import com.pedrin.produtos.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -9,19 +9,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping("/clientes")
+@RequestMapping("/produtos")
 @RequiredArgsConstructor
-public class ClienteController {
+public class ProdutoController {
 
-    private final ClienteService service;
+    private final ProdutoService service;
 
     @PostMapping
-    public ResponseEntity<Cliente> salvar(@RequestBody Cliente cliente) {
-        return ResponseEntity.ok(service.salvar(cliente));
+    public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
+        return ResponseEntity.ok(service.salvar(produto));
     }
 
     @GetMapping("/{codigo}")
-    public ResponseEntity<Cliente> obterDados(@PathVariable("codigo") Long codigo) {
+    public ResponseEntity<Produto> obterDados(@PathVariable("codigo") Long codigo) {
         return service
                 .obterPorCodigo(codigo)
                 .map(ResponseEntity::ok)
@@ -29,7 +29,7 @@ public class ClienteController {
     }
 
     @GetMapping("/historico/{codigo}")
-    public ResponseEntity<Cliente> obterHistorico(@PathVariable("codigo") Long codigo) {
+    public ResponseEntity<Produto> obterHistorico(@PathVariable("codigo") Long codigo) {
         return service
                 .obterHistoricoPorCodigo(codigo)
                 .map(ResponseEntity::ok)
@@ -38,12 +38,12 @@ public class ClienteController {
 
     @DeleteMapping("/{codigo}")
     public ResponseEntity<Void> deletar(@PathVariable("codigo") Long codigo){
-        var cliente = service.obterPorCodigo(codigo)
+        var produto = service.obterPorCodigo(codigo)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatusCode.valueOf(404),
                         "Produto inexistente"
                 ));
-        service.deletar(cliente);
+        service.deletar(produto);
         return ResponseEntity.noContent().build();
     }
 }

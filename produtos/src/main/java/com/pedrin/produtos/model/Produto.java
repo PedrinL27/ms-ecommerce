@@ -22,4 +22,7 @@ public class Produto {
 
     @Column(name = "descricao", length = 300)
     private String descricao;
+
+    @Column(name = "ativo")
+    private boolean ativo;
 }

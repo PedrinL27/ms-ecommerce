@@ -69,7 +69,7 @@ public class CallbackService {
 
     private void carregarDadosCliente(Pedido pedido) {
         Long codigoCliente = pedido.getCodigoCliente();
-        var response = clienteClient.obterDados(codigoCliente);
+        var response = clienteClient.obterHistorico(codigoCliente);
         pedido.setDadosCliente(response.getBody());
 
     }
@@ -82,7 +82,7 @@ public class CallbackService {
 
     private void carregarDadosProduto(ItemPedido item) {
         Long codigoProduto = item.getCodigoProduto();
-        var response = produtosClient.obterDados(codigoProduto);
+        var response = produtosClient.obterHistorico(codigoProduto);
 
         item.setNome(response.getBody().nome());
     }

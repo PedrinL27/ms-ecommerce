@@ -11,4 +11,7 @@ public interface ProdutosClient {
 
     @GetMapping("{codigo}")
     ResponseEntity<ProdutoRepresentation> obterDados(@PathVariable("codigo") Long codigo);
+
+    @GetMapping("/historico/{codigo}")
+    ResponseEntity<ProdutoRepresentation> obterHistorico(@PathVariable("codigo") Long codigo);
 }

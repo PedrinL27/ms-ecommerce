@@ -18,6 +18,23 @@ public class ClienteService {
     }
 
     public Optional<Cliente> obterPorCodigo(Long codigo){
+        var clienteOptional = repository.findById(codigo);
+
+        if (clienteOptional.isPresent()) {
+            var cliente  = clienteOptional.get();
+            if (!cliente.isAtivo()) {
+                return Optional.empty();
+            }
+        }
+        return clienteOptional;
+    }
+
+    public void deletar(Cliente cliente) {
+        cliente.setAtivo(false);
+        repository.save(cliente);
+    }
+
+    public Optional<Cliente> obterHistoricoPorCodigo(Long codigo) {
         return repository.findById(codigo);
     }
 }
